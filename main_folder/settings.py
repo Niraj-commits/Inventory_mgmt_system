@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'inventory_mgmt_system',
 ]
 
 MIDDLEWARE = [
@@ -78,7 +79,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'inventory_mgmt_system',
         'USER':'admin',
-        'PASSWORD':'admin',
+        'PASSWORD':'niraj',
         'HOST':'localhost',
         'PORT': '5432'
     }
