@@ -5,7 +5,7 @@ from .models import *
 # Register your models here.
 admin.site.register(Category)
 admin.site.register(Product)
-# admin.site.register(Order)
-# admin.site.register(Order_Items)
-# admin.site.register(Payment)
-# admin.site.register(Stock)
+admin.site.register(Order)
+admin.site.register(Order_Item)
+admin.site.register(Payment)
+admin.site.register(Stock)
