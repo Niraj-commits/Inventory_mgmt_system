@@ -2,15 +2,15 @@ from rest_framework.response import Response
 from rest_framework import serializers
 from .models import *
 
-class CategorySerializer(serializers.Serializer):
+class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = ['id','name']
         
     def create(self,validated_data):
-        occurences = self.Meta.model.objects.get(name = validated_data.get('name')).count()
+        occurences = self.Meta.model.objects.filter(name = validated_data.get('name')).exists()
         
-        if occurences > 0:
+        if occurences:
             raise serializers.ValidationError("Category already exist")
         
         category = self.Meta.model(**validated_data)
@@ -18,36 +18,47 @@ class CategorySerializer(serializers.Serializer):
         return category
     
     def update(self,instance,validated_data):
-        occurences = self.Meta.model.objects.get(name = validated_data.get('name')).count()
+        occurences = self.Meta.model.objects.filter(name = validated_data.get('name')).exists()
         
-        if occurences > 0:
+        if occurences:
             raise serializers.ValidationError("Category already exist")
         
-        instance = self.Meta.model(**validated_data)
+        instance.__dict__.update(validated_data)
         instance.save()
         return instance
 
 class ProductSerializer(serializers.ModelSerializer):
+    
+    vat_price = serializers.SerializerMethodField()
+    category = serializers.StringRelatedField()
+    category_id = serializers.PrimaryKeyRelatedField(
+        queryset = Category.objects.all(),
+        source = 'category'
+    )
+    
     class Meta:
         model = Product
-        fields = ['id','name','description','price','quantity','category','product_status']
+        fields = ['id','name','description','price','vat_price','quantity','category',"category_id",'product_status']
+    
+    def get_vat_price(self,product : Product):
+        return product.price * 0.13 + product.price    
         
     def create(self,validated_data):
-        occurences = self.Meta.model.objects.get(name = validated_data.get('name'),category = validated_data.get('category')).count()
+        occurences = self.Meta.model.objects.filter(name = validated_data.get('name'),category = validated_data.get('category')).exists()
         
-        if occurences > 0:
-            raise serializers.ValidationError("Category already exist")
+        if occurences:
+            raise serializers.ValidationError("Product already exist")
         
         product = self.Meta.model(**validated_data)
         product.save()
         return product
     
     def update(self,instance,validated_data):
-        occurences = self.Meta.model.objects.get(name = validated_data.get('name'),category = validated_data.get('category')).count()        
-        if occurences > 0:
+        occurences = self.Meta.model.objects.filter(name = validated_data.get('name'),category = validated_data.get('category')).exists()        
+        if occurences:
             raise serializers.ValidationError("Category already exist")
         
-        instance = self.Meta.model(**validated_data)
+        instance.__dict__.update(validated_data)
         instance.save()
         return instance
         

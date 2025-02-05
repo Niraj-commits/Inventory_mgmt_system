@@ -11,7 +11,7 @@ class Product(models.Model):
     prod_stat = [('Available','Available'),('Out','Out')]
     name = models.CharField(max_length=50)
     description = models.TextField()
-    price = models.DecimalField(max_digits=100,decimal_places=2,default=0.00)
+    price = models.FloatField(default=0.00)
     quantity = models.FloatField(default=0)
     category = models.ForeignKey(Category,on_delete=models.PROTECT,default=None)
     product_status = models.CharField(max_length=50,choices=prod_stat,default='Available')
