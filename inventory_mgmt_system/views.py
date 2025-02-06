@@ -7,6 +7,7 @@ from rest_framework import status
 from rest_framework import viewsets
 from .paginator import *
 from .permission import IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import filters
 from .filter import *
@@ -60,34 +61,14 @@ class StockDetails(viewsets.ViewSet):
         return Response({"Details":"Data has been deleted"},status=status.HTTP_200_OK)
     
 
-class OrderDetails(viewsets.ViewSet):
-    def list(self,request):
-        queryset = Order.objects.all()
-        serializer = OrderSerializer(queryset,many = True)
-        return Response(serializer.data)
+class OrderDetails(viewsets.ModelViewSet):
     
-    def create(self,request):
-        serializer = OrderSerializer(data = request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data)
+    queryset = Order.objects.prefetch_related('items').all()
+    serializer_class = OrderSerializer
+    pagination_class = CustomPagination
+    permission_classes = [IsAuthenticated]
     
-    def retrieve(self,request,pk):
-        queryset = Order.objects.get(pk = pk)
-        serializer = OrderSerializer(queryset)
-        return Response(serializer.data)
     
-    def update(self,request,pk):
-        queryset = Order.objects.get(pk = pk)
-        serializer = OrderSerializer(queryset,data = request.data)
-        serializer.is_valid(raise_exception=True)
-        return Response({"Details":"Data has been updated"},status=status.HTTP_200_OK)
-    
-    def destroy(self,request,pk):
-        queryset = Order.objects.get(pk = pk)
-        queryset.delete()
-        return Response({"Details":"Data has been deleted"},status=status.HTTP_200_OK)
-
 class OrderItemDetails(viewsets.ViewSet):
     def list(self,request):
         queryset = Order_Item.objects.all()

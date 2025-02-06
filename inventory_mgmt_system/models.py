@@ -28,8 +28,8 @@ class Order(models.Model):
     order_status = models.CharField(max_length=50,choices=possible_choices,default='Pending')
 
 class Order_Item(models.Model):
-    product = models.ForeignKey(Product,on_delete=models.PROTECT,default=None)
-    order = models.ForeignKey(Order,on_delete=models.PROTECT,default=None)
+    product = models.ForeignKey(Product,on_delete=models.PROTECT,default=None,related_name='items')
+    order = models.ForeignKey(Order,on_delete=models.PROTECT,default=None,related_name='items')
     quantity = models.IntegerField(default=0)
 
 class Payment(models.Model):

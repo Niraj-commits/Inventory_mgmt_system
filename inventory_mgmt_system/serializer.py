@@ -67,15 +67,22 @@ class StockSerializer(serializers.ModelSerializer):
         model = Stock
         fields = ['id','quantity','product_id']
         
-class OrderSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Order
-        fields = ['id','order_status']
+
 
 class OrderItemSerializer(serializers.ModelSerializer):
+    
+    product= serializers.StringRelatedField()
     class Meta:
         model = Order_Item
         fields = ['id','product','order','quantity']
+        
+class OrderSerializer(serializers.ModelSerializer):
+    user = serializers.HiddenField(default = serializers.CurrentUserDefault())
+    items = OrderItemSerializer(many = True)
+    class Meta:
+        model = Order
+        fields = ['id','user','order_status','items']
+
 
 class PaymentSerializer(serializers.ModelSerializer):
     class Meta:
