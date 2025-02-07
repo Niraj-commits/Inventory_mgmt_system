@@ -82,7 +82,15 @@ class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = ['id','user','order_status','items']
-
+        
+        
+    def create(self,validated_data):
+        items = validated_data.pop('items')
+        order = Order.objects.create(**validated_data)
+        
+        # for item in items:
+        #     orderitems =  
+            
 
 class PaymentSerializer(serializers.ModelSerializer):
     class Meta:
