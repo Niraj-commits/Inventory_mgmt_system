@@ -72,13 +72,7 @@ python manage.py startapp test (creates new app named test)
 	    ...
 	    'rest_framework.authtoken',
 	]
-	
-   - add in the end of setting as 
-	 REST_FRAMEWORK = {
-	   'DEFAULT_AUTHENTICATION_CLASSES': [
-	      'rest_framework.authentication.TokenAuthentication',
-	    ],
-	 }
+	(remaining for setting.py in last)
 
 6. Installing django-filters
 
@@ -116,9 +110,17 @@ python manage.py startapp test (creates new app named test)
   	 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 	 urlpatterns = [
    		...
-    		path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
-    		path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
-    		path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
+    		path('schema/', SpectacularAPIView.as_view(), name='schema'),
+    		path('schema/swagger/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger'),
+    		path('schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
 	 ]
+   -add to settings.py as (also includes settings for Token Authentication)
+	   REST_FRAMEWORK = {
+	    'DEFAULT_AUTHENTICATION_CLASSES': [
+		'rest_framework.authentication.TokenAuthentication',
+	    ],
+	    # YOUR SETTINGS
+	    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+	}
 
 	   
