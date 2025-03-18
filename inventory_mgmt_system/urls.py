@@ -10,7 +10,6 @@ router.register(r'order',OrderDetails,basename="order")
 router.register(r'orderitem',OrderItemDetails,basename="orderitem")
 router.register(r'payment',PaymentDetails,basename="payment")
 
-
 urlpatterns = [
     path('',include(router.urls))
 ]

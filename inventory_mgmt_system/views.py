@@ -6,7 +6,7 @@ from .serializer import *
 from rest_framework import status
 from rest_framework import viewsets
 from .paginator import *
-from .permission import IsAuthenticatedOrReadOnly
+from .permission import *
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import filters
@@ -18,7 +18,7 @@ class CategoryDetails(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     pagination_class = CustomPagination
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [AllowView]
         
 # By using View Sets
 class ProductDetails(viewsets.ModelViewSet):
@@ -26,9 +26,9 @@ class ProductDetails(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     pagination_class = CustomPagination
+    permission_classes = [AllowView]
     filter_backends = [filters.SearchFilter,filter.DjangoFilterBackend]
     search_fields = ['name']
-    permission_classes = [IsAuthenticatedOrReadOnly]
     filterset_class = customFilter
 
 class StockDetails(viewsets.ViewSet):
@@ -66,7 +66,7 @@ class OrderDetails(viewsets.ModelViewSet):
     queryset = Order.objects.prefetch_related('items').all()
     serializer_class = OrderSerializer
     pagination_class = CustomPagination
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
     
     
 class OrderItemDetails(viewsets.ViewSet):
